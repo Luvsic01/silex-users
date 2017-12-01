@@ -1,0 +1,10 @@
+Tips : Send informations to the database using doctrine
+
+```php
+$userToStore = new UserModel();
+
+// do stuff here
+
+$entityManager->persist($userToStore);
+$entityManager->flush();
+```

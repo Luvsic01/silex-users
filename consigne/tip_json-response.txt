@@ -1,0 +1,6 @@
+Tips : Return a JSON response
+
+```php
+$responseContent = ['some data'];
+return $app->json($responseContent);
+```

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title '' %} - My Silex Application</title>
+
+        <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css" />
+
+    </head>
+    <body>
+        {% block content %}
+            content default
+        {% endblock %}
+        <script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
+        <script src="{{ asset('js/script.js') }}"></script>
+    </body>
+</html>

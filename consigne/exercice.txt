@@ -1,0 +1,18 @@
+Exercice de consolidation :
+	Create an API to manage the users
+	step 1 :
+		- create a new silex project in htdocs
+			composer create-project fabpot/silex-skeleton my_project
+	
+	Objective :
+		- have one route :
+			* HTTP GET /admin/users
+			* Display the list of users as JSON response
+			
+		- have one route :
+			* HTTP POST /admin/user
+			* Create a new user
+			
+		- have one route :
+			* HTTP POST /admin/user/userId
+			* Delete a user

@@ -1,0 +1,8 @@
+Tips : remove data from the database
+
+```php
+$userToDelete = $repository->find($userId);
+
+$entityManager->remove($userToDelete);
+$entityManager->flush();
+```

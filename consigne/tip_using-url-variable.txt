@@ -1,0 +1,12 @@
+Tips : using URL part
+
+```php
+$app->get('/admin/user/{id}', 'MyControllerClass::processGetRequest');
+```
+
+```php
+interface Controller
+{
+	public function processGetRequest($request, $application, $id);
+}
+```
