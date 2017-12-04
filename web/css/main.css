@@ -59,7 +59,7 @@ form input[type="submit"]:hover {
     display: none;
 }
 
-div.valid{
+.valid{
     background-color: palegreen;
     color: darkgreen;
 }

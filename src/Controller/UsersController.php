@@ -39,32 +39,29 @@ class UsersController
      */
     public function createUser(Request $request, Application $app): JsonResponse
     {
-        if ( !$request->query->has('lastname') || !$request->query->has('firstname') ) {
+        if ( empty($request->request->get('lastname')) || empty($request->request->get('firstname')) ) {
             // Si il manque un paramètre retour json
-            $jsonReturn = ['code' => '0', 'message' => 'Paramètre manquant'];
-        }
-        else {
-            // On créer un nouveau UserModel vide
-            $userToStore = new UsersModel();
-
-            // On remplie notre objet avec les valeurs dans la requests POST (Doctrine fait le striptag)
-            $userToStore->setLastname($request->query->get('lastname'));
-            $userToStore->setFirstname($request->query->get('firstname'));
-
-            // On récupère notre EntityManager
-            $entityManager = $this->getEntityManager($app);
-
-            // On ajoute notre utilisateur dans la pile pour le rajouter dans la db
-            $entityManager->persist($userToStore);
-
-            // On execute les taches en attente
-            $entityManager->flush();
-
-            // On créer notre retour json
-            $jsonReturn = ['code' => '1', 'message' => 'Utilisateur ajouté'];
+            return $app->json(['code' => 0, 'message' => 'Paramètre manquant'], 400);
         }
 
-        return $app->json($jsonReturn);
+        // On créer un nouveau UserModel vide
+        $userToStore = new UsersModel();
+
+        // On remplie notre objet avec les valeurs dans la requests POST (Doctrine fait le striptag)
+        $userToStore->setLastname($request->request->get('lastname'));
+        $userToStore->setFirstname($request->request->get('firstname'));
+
+        // On récupère notre EntityManager
+        $entityManager = $this->getEntityManager($app);
+
+        // On ajoute notre utilisateur dans la pile pour le rajouter dans la db
+        $entityManager->persist($userToStore);
+
+        // On execute les taches en attente
+        $entityManager->flush();
+
+        // On créer notre retour json
+        return $app->json(['code' => 1, 'message' => 'Utilisateur ajouté']);
     }
 
     /**
