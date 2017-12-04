@@ -33,11 +33,17 @@ $app->delete('/admin/user/{id}', 'Controller\UsersController::deleteUser')
     ->bind('deleteUser');
 
 
-$app->get('/admin', function () use ($app) {
+
+$app->get('/admin', 'Controller\UsersController::getHomepage')
+    ->bind('homepage');
+
+
+/*$app->get('/admin', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
 })
     ->bind('homepage')
 ;
+*/
 
 
 $app->error(function (\Exception $e, Request $request, $code) use ($app) {

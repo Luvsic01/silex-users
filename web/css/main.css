@@ -1,20 +1,27 @@
-form, .usersList{
-    padding: 30px;
-    background: #FFFFFF;
-    margin: 50px auto;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
-    max-width: 400px;
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+*{
+    font-family: 'Open Sans', sans-serif;
 }
-form h2{
+
+form, div.usersList{
+    padding: 15px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+    margin: 10px;
+    min-width: 300px;
+}
+form h2, .usersList h2{
     background: #4D4D4D;
     text-transform: uppercase;
     color: #ddd;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 100;
-    padding: 20px;
-    margin: -30px -30px 30px -30px;
+    padding: 15px;
+    margin: -15px -15px 15px -15px;
 }
 form input[type="text"],
+form input[type="password"],
 form input[type="url"],
 form select,
 form textarea
@@ -62,4 +69,51 @@ form input[type="submit"]:hover {
 .valid{
     background-color: palegreen;
     color: darkgreen;
+}
+
+
+.usersList {
+    margin: 0 auto;
+    margin-bottom: 15px;
+}
+
+.usersList thead {
+    background: #4D4D4D;
+    color: #ccc;
+}
+.usersList thead tr th {
+    font-weight: bold;
+    padding: 8px 15px;
+    padding-left: 15px;
+}
+.usersList thead tr th span {
+    padding-right: 15px;
+    background-repeat: no-repeat;
+    background-position: 100% 100%;
+}
+
+
+.usersList thead tr th.headerSortUp span {
+    background-image: url('https://i.imgur.com/SP99ZPJ.png');
+}
+.usersList thead tr th.headerSortDown span {
+    background-image: url('https://i.imgur.com/RkA9MBo.png');
+}
+
+
+.usersList tbody tr {
+    color: #555;
+}
+.usersList tbody tr td {
+    text-align: center;
+    padding: 8px 10px;
+}
+.usersList tbody tr td.lalign {
+    text-align: left;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
 }

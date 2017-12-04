@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>{% block title '' %} - My Silex Application</title>
+        <title>{% block title '' %}</title>
 
         <link href="{{ asset('css/main.css') }}" rel="stylesheet" type="text/css" />
 
@@ -10,7 +10,9 @@
         {% block content %}
             content default
         {% endblock %}
-        <script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
-        <script src="{{ asset('js/script.js') }}"></script>
+
+        {% block scriptImport %}
+            <script src="{{ asset('js/jquery-3.2.1.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

@@ -1,0 +1,71 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Admin page' %}
+
+{% block content %}
+    <div>
+        {% if user is not null %}
+            {{ user.username }} is connected with role [{{ user.getRoles() | join(', ') }}]
+        {% endif %}
+    </div>
+    <div class="container">
+        <div>
+            <form id="addUser" action="">
+                <h2>Add Users</h2>
+
+                <!--Information du formulaire-->
+                <div class="infoFormulaire"></div>
+
+                <label for="firstname">Firstname:</label>
+                <input id="firstname" name="firstname" type="text">
+                <label for="lastname">Lastname:</label>
+                <input id="lastname" name="lastname" type="text">
+                <label for="username">Username:</label>
+                <input id="username" name="username" type="text">
+                <label for="role">Role:</label>
+                <input id="role" name="role" type="text">
+                <label for="password">Password:</label>
+                <input id="password" name="password" type="password">
+                <input type="submit" value="Ajouter">
+            </form>
+        </div>
+
+        <div>
+            <div class="usersList">
+                <h2>Liste des utilisateurs</h2>
+                <table>
+                    <thead> <!-- En-tête du tableau -->
+                    <tr>
+                        <th>ID</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {# Foreach users #}
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.lastname|upper }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.role }}</td>
+                            <td><input class="deleteBtn" type="submit" value="Delete" data-id="{{ user.id }}"></td>
+                        </tr>
+                    {% else %}
+                        Pas d'utilisateurs
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scriptImport %}
+    {{ parent() }}
+    <script src="{{ asset('js/admin/adminScript.js') }}"></script>
+{% endblock %}

@@ -1,6 +1,6 @@
 $(function () {
 
-    showAllUsers();
+    addListenerBtnDelete();
 
     // Lors de l'event submit sur le formulaire
     $('form').on('submit', function (e) {
@@ -20,39 +20,39 @@ $(function () {
             .done(function (data) { // Si pas d'erreur lors de l'appel ajax
                 // Si code 1 tout ok on affiche le message ok
                 infoFormulaire.html(data.message).fadeIn().addClass('valid');
+                addViewNewUser(data.user);
+                addListenerBtnDelete();
             })
             .fail(function (data) { // Si erreur lors de l'appel ajax on l'affiche dans la div info
                 infoFormulaire.html(data.responseJSON.message).removeClass('valid').fadeIn();
             });
     });
 
-
-
-
-    function showAllUsers() {
-        $.ajax({
-            url: "admin/users",
-            method: "GET",
-            dataType: "json" // On récupère du json
-        })
-            .done(function (data) { // Si pas d'erreur lors de l'appel ajax
-                var tableUserList = $('.usersList').find('tbody');
-                tableUserList.html('');
-                $.each(data, function (key, value) {
-                    tableUserList.append('<tr>');
-                    tableUserList.append('<td>' + value.id + '</td>');
-                    tableUserList.append('<td>' + value.firstname + '</td>');
-                    tableUserList.append('<td>' + value.lastname + '</td>');
-                    tableUserList.append('<td>' + '<input class="deleteBtn" type="submit" value="Delete" data-id="' + value.id + '">' + '</td>');
-                    tableUserList.append('</tr>');
-                });
-
-                $('.deleteBtn').on('click', function () {
-                    var id = $(this).data('id');
-                    console.log(id);
-                });
+    function addListenerBtnDelete() {
+        $('.deleteBtn').on('click', function () {
+            var id = $(this).data('id');
+            var input = $(this);
+            $.ajax({
+                url: "admin/user/" + id,
+                method: "DELETE"
             })
+                .done(function (data) {
+                    input.parent().parent().hide();
+                })
+        });
     }
 
+    function addViewNewUser(user) {
+        var tableUserList = $('.usersList').find('tbody');
+        tableUserList.append(
+            '<tr>' +
+            '<td>' + user.id + '</td>' +
+            '<td>' + user.firstname + '</td>' +
+            '<td>' + user.lastname + '</td>' +
+            '<td>' + user.username + '</td>' +
+            '<td>' + user.role + '</td>' +
+            '<td> <input class="deleteBtn" type="submit" value="Delete" data-id="' + user.id + '"> </td> </tr>'
+        );
+    }
 
 }); // Fin JQUERY

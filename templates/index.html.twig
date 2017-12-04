@@ -1,34 +1,11 @@
 {% extends "layout.html.twig" %}
 
+{% block title 'HomePage' %}
+
 {% block content %}
 
-    <form id="addUser" action="">
-        <h2>Add Users</h2>
+{% endblock %}
 
-        <!--Information du formulaire-->
-        <div class="infoFormulaire"></div>
-
-        <label for="firstname">Firstname:</label>
-        <input id="firstname" name="firstname" type="text">
-        <label for="lastname">Lastname:</label>
-        <input id="lastname" name="lastname" type="text">
-        <input type="submit" value="Ajouter">
-    </form>
-
-
-    <table class="usersList">
-        <caption>Liste des utilisateurs</caption>
-        <thead> <!-- En-tête du tableau -->
-            <tr>
-                <th>ID</th>
-                <th>Firstname</th>
-                <th>Lastname</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
-
-
+{% block scriptImport %}
+    {{ parent() }}
 {% endblock %}

@@ -3,9 +3,6 @@
 namespace Controller;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMInvalidArgumentException;
 use Models\UsersModel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +10,33 @@ use Symfony\Component\HttpFoundation\Request;
 
 class UsersController
 {
+    public function getHomepage(Request $request, Application $app)
+    {
+        $allUsersArrayObject = $this->getEntityManager($app)
+            ->getRepository(UsersModel::class)
+            ->findAll();
+        $users = [];
+        foreach ($allUsersArrayObject as $userObject) {
+            $users[] = $userObject->toArray();
+        }
+
+        $user = null;
+        $token = $app['security.token_storage']->getToken();        // Get current authentication token
+        if ($token !== null) {
+            $user = $token->getUser();                              // Get user from token
+        }
+
+        return $app['twig']->render('admin/admin.html.twig',
+            [
+                'users' => $users,      // array of users bdd
+                'user' => $user         // user auth
+            ]
+        );
+    }
+
+
+    /* API */
+
     /**
      * @param Request $request
      * @param Application $app
@@ -25,7 +49,7 @@ class UsersController
             ->findAll();
 
         $result = [];
-        foreach ($allUsersArrayObject as  $userObject) {
+        foreach ($allUsersArrayObject as $userObject) {
             $result[] = $userObject->toArray();
         }
 
@@ -39,29 +63,37 @@ class UsersController
      */
     public function createUser(Request $request, Application $app): JsonResponse
     {
-        if ( empty($request->request->get('lastname')) || empty($request->request->get('firstname')) ) {
-            // Si il manque un paramètre retour json
+        if (empty($request->request->get('lastname')) ||
+            empty($request->request->get('firstname')) ||
+            empty($request->request->get('username')) ||
+            empty($request->request->get('role')) ||
+            empty($request->request->get('password'))
+        ) {
+            // if an params is missing -> return an json with code 0 and staut 400
             return $app->json(['code' => 0, 'message' => 'Paramètre manquant'], 400);
         }
 
-        // On créer un nouveau UserModel vide
+        // Create a new UserModel empty
         $userToStore = new UsersModel();
 
-        // On remplie notre objet avec les valeurs dans la requests POST (Doctrine fait le striptag)
+        // Set the lastname and firstname of my object with the value POST (Doctrine escape the tag)
         $userToStore->setLastname($request->request->get('lastname'));
         $userToStore->setFirstname($request->request->get('firstname'));
+        $userToStore->setUsername($request->request->get('username'));
+        $userToStore->setRole($request->request->get('role'));
+        $userToStore->setPassword($request->request->get('password'));
 
-        // On récupère notre EntityManager
+        // Get the EntityManager with method for completion
         $entityManager = $this->getEntityManager($app);
 
-        // On ajoute notre utilisateur dans la pile pour le rajouter dans la db
+        // add user on the waiting
         $entityManager->persist($userToStore);
 
-        // On execute les taches en attente
+        // Execute the task in waiting
         $entityManager->flush();
 
-        // On créer notre retour json
-        return $app->json(['code' => 1, 'message' => 'Utilisateur ajouté']);
+        // Return the json with code 1 and the new user (with id)
+        return $app->json(['code' => 1, 'message' => 'Utilisateur ajouté', 'user' => $userToStore->toArray()]);
     }
 
     /**
