@@ -4,6 +4,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
+use Silex\Provider\SessionServiceProvider;
 
 // configure your app for the production environment
 
@@ -42,10 +43,18 @@ $app->register(
         'security.firewalls' => [
             'firewall_admin' => [                       // Firewall name
                 'pattern' => '^/admin',                 // Firewall scope
-                'http' => true,                         // Pure http authentification system
-                'users' => [                            // User provider definition
-                    'admin' => ['ROLE_ADMIN', 'foo'],   // User => [role, pwd]
-                    'user' => ['ROLE_USER', 'bar']
+                'form' => [
+                    'login_path' => '/login',
+                    'check_path' => '/admin/login_check'
+                ],
+                'users' => function() use ($app){
+                    $repository = $app['orm.em']->getRepository(Models\UsersModel::class);
+                    return new \Provider\DBUserProvider($repository);
+                },
+                'logout' => [
+                    'logout_path' => '/admin/logout',
+                    'invalidate_session' => true,
+                    'target_url' => '/admin'
                 ]
             ]
         ],
@@ -60,3 +69,5 @@ $app->register(
         ]
     ]
 );
+
+$app->register(new SessionServiceProvider());

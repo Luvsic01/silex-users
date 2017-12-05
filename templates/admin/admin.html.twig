@@ -3,11 +3,14 @@
 {% block title 'Admin page' %}
 
 {% block content %}
-    <div>
+    <nav>
         {% if user is not null %}
-            {{ user.username }} is connected with role [{{ user.getRoles() | join(', ') }}]
+            <p>
+                {{ user.username }} is connected with roles [{{ user.getRoles() | join(', ') }}]
+                <a href="admin/logout">logout</a>
+            </p>
         {% endif %}
-    </div>
+    </nav>
     <div class="container">
         <div>
             <form id="addUser" action="">
@@ -22,8 +25,12 @@
                 <input id="lastname" name="lastname" type="text">
                 <label for="username">Username:</label>
                 <input id="username" name="username" type="text">
-                <label for="role">Role:</label>
-                <input id="role" name="role" type="text">
+                <label for="roles">Roles:</label>
+                <select name="roles" id="roles">
+                    <option value="">------------</option>
+                    <option value="ROLE_ADMIN">ROLE_ADMIN</option>
+                    <option value="ROLE_USER">ROLE_USER</option>
+                </select>
                 <label for="password">Password:</label>
                 <input id="password" name="password" type="password">
                 <input type="submit" value="Ajouter">
@@ -40,7 +47,7 @@
                         <th>Firstname</th>
                         <th>Lastname</th>
                         <th>Username</th>
-                        <th>Role</th>
+                        <th>Roles</th>
                         <th>Delete</th>
                     </tr>
                     </thead>
@@ -52,7 +59,7 @@
                             <td>{{ user.firstname }}</td>
                             <td>{{ user.lastname|upper }}</td>
                             <td>{{ user.username }}</td>
-                            <td>{{ user.role }}</td>
+                            <td>{{ user.roles|join(':') }}</td>
                             <td><input class="deleteBtn" type="submit" value="Delete" data-id="{{ user.id }}"></td>
                         </tr>
                     {% else %}

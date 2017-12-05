@@ -2,13 +2,15 @@
 
 namespace Models;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * Class UsersModel
  * @Entity()
  * @Table(name="users")
  * @package Models
  */
-class UsersModel
+class UsersModel implements UserInterface
 {
     //region params
 
@@ -28,7 +30,7 @@ class UsersModel
     private $username;
 
     /** @Column(name="role", type="string", length=32, nullable=false) */
-    private $role;
+    private $roles;
 
     /** @Column(name="password", type="string", length=255, nullable=false) */
     private $password;
@@ -43,9 +45,21 @@ class UsersModel
             'firstname' => $this->firstname,
             'lastname' => $this->lastname,
             'username' => $this->username,
-            'role' => $this->role
+            'roles' => $this->getRoles(),
+            'password' => $this->password
         ];
     }
+
+    public function getSalt()
+    {
+        return ;
+    }
+
+    public function eraseCredentials()
+    {
+        return ;
+    }
+
     //endregion
 
     //region getter and setter
@@ -98,17 +112,20 @@ class UsersModel
     /**
      * @return mixed
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return explode(':',$this->roles);
     }
 
     /**
-     * @param mixed $role
+     * @param mixed $roles
      */
-    public function setRole($role): void
+    public function setRoles($roles): void
     {
-        $this->role = $role;
+        if (is_array($roles)){
+            $roles = implplode(':', $roles);
+        }
+        $this->roles = $roles;
     }
 
     /**

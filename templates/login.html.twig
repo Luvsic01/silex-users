@@ -1,0 +1,21 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'login page' %}
+
+{% block content %}
+    <form id="login" action="{{ path('admin_login_check') }}" method="post">
+        <h2>login</h2>
+        {% if error is not null %}
+        <div class="infoFormulaire" style="display: block">{{ error }}</div>
+        {% endif %}
+        <label for="_username">Username</label>
+        <input id="_username" type="text" name="_username" value="{{ last_username }}"/>
+        <label for="_password">Password</label>
+        <input id="_password" type="password" name="_password" value=""/>
+        <input type="submit">
+    </form>
+{% endblock %}
+
+{% block scriptImport %}
+    {{ parent() }}
+{% endblock %}

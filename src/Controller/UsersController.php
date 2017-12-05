@@ -7,6 +7,7 @@ use Models\UsersModel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\ORMInvalidArgumentException;
 
 class UsersController
 {
@@ -66,7 +67,7 @@ class UsersController
         if (empty($request->request->get('lastname')) ||
             empty($request->request->get('firstname')) ||
             empty($request->request->get('username')) ||
-            empty($request->request->get('role')) ||
+            empty($request->request->get('roles')) ||
             empty($request->request->get('password'))
         ) {
             // if an params is missing -> return an json with code 0 and staut 400
@@ -80,7 +81,7 @@ class UsersController
         $userToStore->setLastname($request->request->get('lastname'));
         $userToStore->setFirstname($request->request->get('firstname'));
         $userToStore->setUsername($request->request->get('username'));
-        $userToStore->setRole($request->request->get('role'));
+        $userToStore->setRoles($request->request->get('roles'));
         $userToStore->setPassword($request->request->get('password'));
 
         // Get the EntityManager with method for completion

@@ -50,7 +50,7 @@ $(function () {
             '<td>' + user.firstname + '</td>' +
             '<td>' + user.lastname + '</td>' +
             '<td>' + user.username + '</td>' +
-            '<td>' + user.role + '</td>' +
+            '<td>' + user.roles + '</td>' +
             '<td> <input class="deleteBtn" type="submit" value="Delete" data-id="' + user.id + '"> </td> </tr>'
         );
     }
