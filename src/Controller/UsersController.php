@@ -3,11 +3,13 @@
 namespace Controller;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityNotFoundException;
+use Models\Role;
 use Models\UsersModel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\ORMInvalidArgumentException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UsersController
 {
@@ -74,6 +76,9 @@ class UsersController
             return $app->json(['code' => 0, 'message' => 'Paramètre manquant'], 400);
         }
 
+        // Get the EntityManager with method for completion
+        $entityManager = $this->getEntityManager($app);
+
         // Create a new UserModel empty
         $userToStore = new UsersModel();
 
@@ -81,11 +86,14 @@ class UsersController
         $userToStore->setLastname($request->request->get('lastname'));
         $userToStore->setFirstname($request->request->get('firstname'));
         $userToStore->setUsername($request->request->get('username'));
-        $userToStore->setRoles($request->request->get('roles'));
         $userToStore->setPassword($request->request->get('password'));
 
-        // Get the EntityManager with method for completion
-        $entityManager = $this->getEntityManager($app);
+        $role = $request->request->get('roles');
+        $roleInstance = $entityManager->getRepository(Role::class)->findOneByLabel($role);
+        if (!$roleInstance){
+            throw new NotFoundHttpException('Role ' . $role . ' Not found');
+        }
+        $userToStore->setRoles([$roleInstance]);
 
         // add user on the waiting
         $entityManager->persist($userToStore);

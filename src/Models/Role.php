@@ -3,12 +3,12 @@
 namespace Models;
 
 /**
- * Class roloe
+ * Class Role
  * @Entity()
  * @Table(name="role")
  * @package Models
  */
-class role
+class Role
 {
     /** @Id()
      * @GeneratedValue()

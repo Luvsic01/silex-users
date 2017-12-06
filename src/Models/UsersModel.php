@@ -29,8 +29,15 @@ class UsersModel implements UserInterface
     /** @Column(name="username", type="string", length=32, nullable=false) */
     private $username;
 
-    /** @Column(name="role", type="string", length=32, nullable=false) */
-    private $roles;
+    /**
+     * Many Users have Many Role.
+     * @ManyToMany(targetEntity="Role")
+     * @JoinTable(name="users_has_role",
+     *      joinColumns={@JoinColumn(name="users_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@JoinColumn(name="role_id", referencedColumnName="id")}
+     *      )
+     */
+    private $roles = [];
 
     /** @Column(name="password", type="string", length=255, nullable=false) */
     private $password;
@@ -38,6 +45,9 @@ class UsersModel implements UserInterface
     //endregion
 
     //region methodes
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return [
@@ -50,11 +60,17 @@ class UsersModel implements UserInterface
         ];
     }
 
+    /**
+     * @return null|string|void
+     */
     public function getSalt()
     {
         return ;
     }
 
+    /**
+     *
+     */
     public function eraseCredentials()
     {
         return ;
@@ -63,85 +79,116 @@ class UsersModel implements UserInterface
     //endregion
 
     //region getter and setter
-    /** @return mixed */
+    /** @return int */
     public function getId()
     {
         return $this->id;
     }
 
-    /** @return mixed */
+    /** @return string */
     public function getFirstname()
     {
         return $this->firstname;
     }
 
-    /** @param mixed $firstname */
-    public function setFirstname($firstname): void
+    /**
+     * @param string $firstname
+     * @return $this
+     */
+    public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
+        return $this;
     }
 
-    /** @return mixed */
+    /** @return string */
     public function getLastname()
     {
         return $this->lastname;
     }
 
-    /** @param mixed $lastname */
-    public function setLastname($lastname): void
+    /**
+     * @param $lastname
+     * @return $this
+     */
+    public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
         return $this->username;
     }
 
+
     /**
-     * @param mixed $username
+     * @param $username
+     * @return $this
      */
-    public function setUsername($username): void
+    public function setUsername($username)
     {
         $this->username = $username;
+        return $this;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRoles()
+    /** @return array */
+    public function getRoles():array
     {
-        return explode(':',$this->roles);
-    }
-
-    /**
-     * @param mixed $roles
-     */
-    public function setRoles($roles): void
-    {
-        if (is_array($roles)){
-            $roles = implplode(':', $roles);
+        $roles = [];
+        foreach ($this->roles as $role){
+            $roles[] = $role->getLabel();
         }
-        $this->roles = $roles;
+        return $roles;
+    }
+
+
+    /**
+     * @param array $roles
+     * @return $this
+     */
+    public function setRoles(array $roles)
+    {
+        $this->roles = [];
+        foreach ($roles as $role){
+            $this->addRole($role);
+        }
+        return $this;
     }
 
     /**
-     * @return mixed
+     * @param Role $role
+     * @return $this
+     */
+    public function addRole(Role $role){
+        if (in_array($role, $this->roles)){
+            return $this;
+        }
+        $this->roles[] = $role;
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getPassword()
     {
         return $this->password;
     }
 
+
     /**
-     * @param mixed $password
+     * @param string $password
+     * @return $this
      */
-    public function setPassword($password): void
+    public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
 
     //endregion

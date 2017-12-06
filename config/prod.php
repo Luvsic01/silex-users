@@ -15,7 +15,7 @@ $app->register(new DoctrineServiceProvider(),
     [
         'db.options' => [
             'driver' => 'pdo_mysql',
-            'dbname' => 'mvc',
+            'dbname' => 'silex',
             'host' => 'localhost',
             'user' => 'root',
             'password' => ''
