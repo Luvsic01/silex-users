@@ -1,0 +1,26 @@
+{% extends "layout.html.twig" %}
+
+{% block title 'Register page' %}
+
+{% block content  %}
+    {{ form_start(userForm) }}
+    <fieldset>
+        <legend>person :</legend>
+        <div class="row">
+            <div class="xs-col-12">
+                {{ form_errors(userForm.firstname) }}
+            </div>
+            <div class="xs-col-3">
+                {{ form_label(userForm.firstname) }}
+            </div>
+            <div class="xs-col-9">
+                {{ form_widget(userForm.firstname) }}
+            </div>
+        </div>
+        {{ form_row(userForm.lastname) }}
+        {{ form_row(userForm.username) }}
+        {{ form_row(userForm.password) }}
+    </fieldset>
+    {{ form_row(userForm.submit, { 'label': 'Register' }) }}
+    {{ form_rest(userForm) }}
+{% endblock %}

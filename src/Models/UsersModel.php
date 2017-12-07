@@ -20,13 +20,19 @@ class UsersModel implements UserInterface
      */
     protected $id;
 
-    /** @Column(name="firstname", type="string", length=64, nullable=false) */
+    /**
+     * @Column(name="firstname", type="string", length=64, nullable=false)
+     */
     private $firstname;
 
-    /** @Column(name="lastname", type="string", length=64, nullable=false) */
+    /**
+     * @Column(name="lastname", type="string", length=64, nullable=false)
+     */
     private $lastname;
 
-    /** @Column(name="username", type="string", length=32, nullable=false) */
+    /**
+     * @Column(name="username", type="string", length=32, nullable=false)
+     */
     private $username;
 
     /**
@@ -39,7 +45,10 @@ class UsersModel implements UserInterface
      */
     private $roles = [];
 
-    /** @Column(name="password", type="string", length=255, nullable=false) */
+    /**
+     * @Column(name="password", type="string", length=255, nullable=false)
+     *
+     */
     private $password;
 
     //endregion

@@ -59,7 +59,7 @@
                             <td>{{ user.firstname }}</td>
                             <td>{{ user.lastname|upper }}</td>
                             <td>{{ user.username }}</td>
-                            <td>{{ user.roles|join(':') }}</td>
+                            <td>{{ user.roles|join(', ') }}</td>
                             <td><input class="deleteBtn" type="submit" value="Delete" data-id="{{ user.id }}"></td>
                         </tr>
                     {% else %}

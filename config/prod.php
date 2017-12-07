@@ -4,7 +4,6 @@ use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Silex\Provider\SecurityServiceProvider;
 use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
-use Silex\Provider\SessionServiceProvider;
 
 // configure your app for the production environment
 
@@ -65,9 +64,23 @@ $app->register(
             return new PlaintextPasswordEncoder();
         },
         'security.access_rules' => [
-            ['^/admin', 'ROLE_ADMIN']
+            ['^/admin', 'ROLE_USER']
         ]
     ]
 );
 
-$app->register(new SessionServiceProvider());
+$app->register(new \Silex\Provider\SessionServiceProvider());
+
+$app->register(new \Silex\Provider\ValidatorServiceProvider());
+
+$app->register(new \Silex\Provider\FormServiceProvider());
+
+$app->register(new \Silex\Provider\CsrfServiceProvider());
+
+$app['locale'] = 'en_en';
+
+$app->register(new \Silex\Provider\TranslationServiceProvider(),
+    [
+        'translator.domains ' => [],
+    ]
+);

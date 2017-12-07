@@ -3,10 +3,11 @@
 namespace Controller;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityNotFoundException;
+use Form\UserForm;
 use Models\Role;
 use Models\UsersModel;
 use Silex\Application;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -37,9 +38,55 @@ class UsersController
         );
     }
 
+    public function registerAction(Request $request, Application $app)
+    {
+        $user = new UsersModel();
 
-    /* API */
+        $formFactory = $this->getFormFactory($app);
+        $userForm = $formFactory->create(UserForm::class, $user, ['standalone' => true]);
 
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()){
+            $entityManager = $this->getEntityManager($app);
+            $roleRepository = $entityManager->getRepository(Role::class);
+            $userRole = $roleRepository->findOneByLabel('ROLE_USER');
+
+            $user->addRole($userRole);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $app->redirect($app['url_generator']->generate('login'));
+        }
+
+        return $app['twig']->render('user/registrationTemplate.html.twig',
+            [
+                'userForm' => $userForm->createView()
+            ]
+        );
+    }
+
+    //<editor-fold desc="Getter Service">
+    /**
+     * @param Application $app
+     * @return EntityManager
+     */
+    public function getEntityManager(Application $app): EntityManager
+    {
+        return $app['orm.em'];
+    }
+
+    /**
+     * @param Application $app
+     * @return FormFactory
+     */
+    public function getFormFactory(Application $app): FormFactory
+    {
+        return $app['form.factory'];
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="API">
     /**
      * @param Request $request
      * @param Application $app
@@ -135,15 +182,6 @@ class UsersController
         // On retourne le résultat
         return $app->json($jsonReturn);
     }
-
-
-    /**
-     * @param Application $app
-     * @return EntityManager
-     */
-    public function getEntityManager(Application $app): EntityManager
-    {
-        return $app['orm.em'];
-    }
+    //</editor-fold>
 
 }

@@ -8,6 +8,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 //Request::setTrustedProxies(array('127.0.0.1'));
 
+$app->match('/', 'Controller\UsersController::registerAction')
+    ->bind('register');
+
 /*  - have one route :
         * HTTP GET /admin/users
         * Display the list of users as JSON response
@@ -45,7 +48,7 @@ $app->get('/login', function(Request $request) use ($app) {
             'last_username' => $app['session']->get('_security.last_username'),
         ]
     );
-});
+})->bind('login');
 
 /*$app->get('/admin', function () use ($app) {
     return $app['twig']->render('index.html.twig', array());
